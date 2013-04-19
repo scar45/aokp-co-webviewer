@@ -1,4 +1,4 @@
-package co.aokp.webviewer;
+package com.scar45.aokp.co.webviewer;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -31,8 +31,8 @@ public class MainActivity extends Activity {
 	WebView myWebView;
 	ProgressDialog myProgress;
     ProgressBar loadingProgressBar,loadingTitle;
-    String urlAOKP = "http://aokp.co/";
-    String linkDomain = "aokp.co";
+    String urlAOKP = "http://clients.it-foundry.com/aokp/";
+    String linkDomain = "clients.it-foundry.com";
     
     String urlDonateVersion = "https://play.google.com/store/apps/details?id=com.teambroccoli.theme.pcbblue";
     String urlscar45Play = "https://play.google.com/store/apps/developer?id=scar45";
