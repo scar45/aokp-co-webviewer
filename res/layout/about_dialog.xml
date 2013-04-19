@@ -4,13 +4,13 @@ android:layout_width="fill_parent"
 android:layout_height="fill_parent"
 android:gravity="fill"
 android:id="@+id/about_dialog_layout"
-android:background="#0033b5e5"
+android:background="#00005500"
 >
     <ImageView
         android:layout_height="fill_parent"
         android:layout_width="fill_parent"
         android:gravity="center"
-        android:src="@drawable/aokp_logo_large" />
+        android:src="@drawable/ic_launcher" />
         
 </RelativeLayout>
 
