@@ -3,7 +3,7 @@
 android:layout_width="fill_parent"
 android:layout_height="fill_parent"
 android:gravity="fill"
-android:id="@+id/rel_webpage_whole"
+android:id="@+id/aokpWebview"
 android:background="#0033b5e5"
 >
     <ImageView

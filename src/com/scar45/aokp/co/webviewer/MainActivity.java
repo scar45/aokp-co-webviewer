@@ -10,6 +10,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.text.Html;
 import android.text.method.BaseMovementMethod;
 import android.text.method.ScrollingMovementMethod;
@@ -19,6 +20,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ProgressBar;
@@ -28,14 +31,140 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 public class MainActivity extends Activity {
-	WebView myWebView;
-	ProgressDialog myProgress;
+
+    protected FrameLayout webViewPlaceholder;
+	protected WebView webView;
+	protected View aokpWebview;
+	protected ViewGroup parentViewGroup;
+
     ProgressBar loadingProgressBar,loadingTitle;
+
     String urlAOKP = "http://clients.it-foundry.com/aokp/";
     String linkDomain = "clients.it-foundry.com";
-    
     String urlDonateVersion = "https://play.google.com/store/apps/details?id=com.teambroccoli.theme.pcbblue";
     String urlscar45Play = "https://play.google.com/store/apps/developer?id=scar45";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.state_preserving_impl);
+
+		// Initialize the UI
+		initUI();
+	}
+
+    protected void initUI()
+	{
+		// Retrieve UI elements
+		webViewPlaceholder = ((FrameLayout)findViewById(R.id.webViewPlaceholder));
+	
+		// Initialize the WebView if necessary
+		if (aokpWebview == null)
+		{
+			// Create the webview
+            setContentView(R.layout.activity_main);
+        	aokpWebview = (View) findViewById(R.id.aokpWebview);
+            parentViewGroup = (ViewGroup)aokpWebview.getParent();
+			webView = (WebView) findViewById(R.id.webview);
+			webView.getSettings().setSupportZoom(false);
+			webView.getSettings().setBuiltInZoomControls(false);
+			webView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
+			webView.setScrollbarFadingEnabled(true);
+			webView.getSettings().setLoadsImagesAutomatically(true);
+            webView.getSettings().setPluginsEnabled(true);
+            webView.getSettings().setJavaScriptEnabled(true);
+            webView.getSettings().setDatabaseEnabled(true);
+            webView.getSettings().setDomStorageEnabled(true);
+            webView.getSettings().setAppCacheEnabled(true);
+            webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+
+			// Attach the ProgressBar layout
+            loadingProgressBar=(ProgressBar)findViewById(R.id.progressbar_Horizontal);
+
+            webView.setWebChromeClient(new WebChromeClient() {
+
+                // this will be called on page loading progress
+                @Override
+                public void onProgressChanged(WebView view, int newProgress) {
+
+                    super.onProgressChanged(view, newProgress);
+
+                    loadingProgressBar.setProgress(newProgress);
+
+                    // hide the progress bar if the loading is complete
+                    if (newProgress == 100) {
+                    loadingProgressBar.setVisibility(View.GONE);
+                    } else{
+                    loadingProgressBar.setVisibility(View.VISIBLE);
+                    }
+                }
+                
+            });   
+
+            webView.setWebViewClient(new WebViewClient() {
+
+		        @Override
+		        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+
+	                // If the site/domain matches, do not override; let myWebView load the page
+		            if (Uri.parse(url).getHost().equals(linkDomain)) {
+		                return false;
+		            }
+
+		            // Otherwise, the link is not for a page on my site, so launch another Activity that handles URLs
+		            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+		            startActivity(intent);
+		            return true;
+		        }
+
+	        });
+	        
+			// Load the first page
+			webView.loadUrl(urlAOKP);
+
+		}
+		parentViewGroup.removeView(aokpWebview);
+		// Attach the WebView to its placeholder
+		parentViewGroup.addView(aokpWebview);
+	}
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig)
+	{
+		super.onConfigurationChanged(newConfig);
+
+		if (webView != null)
+		{
+			// Remove the WebView from the old placeholder
+			parentViewGroup.removeView(aokpWebview);
+		}
+
+		// Load the layout resource for the new configuration
+        setContentView(R.layout.state_preserving_impl);
+
+		// Reinitialize the UI
+		initUI();
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState)
+	{
+		super.onSaveInstanceState(outState);
+
+		// Save the state of the WebView
+		webView.saveState(outState);
+	}
+
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState)
+	{
+		super.onRestoreInstanceState(savedInstanceState);
+
+		// Restore the state of the WebView
+		webView.restoreState(savedInstanceState);
+	}
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -44,88 +173,15 @@ public class MainActivity extends Activity {
         return true;
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        myWebView = (WebView) findViewById(R.id.webview);
-    	myWebView.setBackgroundColor(0xFF180E17);
-        WebSettings webSettings = myWebView.getSettings();
-        webSettings.setPluginsEnabled(true);
-        webSettings.setJavaScriptEnabled(true);
-        webSettings.setDatabaseEnabled(true);
-        webSettings.setDomStorageEnabled(true);
-        webSettings.setAppCacheEnabled(true);
-        webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
-        myProgress = ProgressDialog.show(MainActivity.this, Html.fromHtml("Loading <b>AOKP.co</b>"), Html.fromHtml("<big><b><font color='" + getResources().getColor(R.color.aokp_pink) + "'><big>Unicorns</big></font></b> are fetching the official website for you nao.</big>"));
-        //myProgress = ProgressDialog.show(this, "Loading AOKP.co", "Please wait...\n\nUnicorns are fetching the official website for you nao.");
-        
-        loadingProgressBar=(ProgressBar)findViewById(R.id.progressbar_Horizontal);
-        myWebView.setWebChromeClient(new WebChromeClient() {
-
-            // this will be called on page loading progress
-
-            @Override
-
-            public void onProgressChanged(WebView view, int newProgress) {
-
-                super.onProgressChanged(view, newProgress);
-
-
-                loadingProgressBar.setProgress(newProgress);
-                //loadingTitle.setProgress(newProgress);
-                // hide the progress bar if the loading is complete
-
-                if (newProgress == 100) {
-                loadingProgressBar.setVisibility(View.GONE);
-
-                } else{
-                loadingProgressBar.setVisibility(View.VISIBLE);
-
-                }
-
-            }
-
-        });        
-                  
-        myWebView.setWebViewClient(new WebViewClient() {
-		    @Override
-		    public boolean shouldOverrideUrlLoading(WebView view, String url) {
-		        // Show the ProgressDialog on page load
-                // myProgress.show();
-        		
-	            // If the site/domain matches, do not override; let myWebView load the page
-		        if (Uri.parse(url).getHost().equals(linkDomain)) {
-		            return false;
-		        }
-
-		        // Otherwise, the link is not for a page on my site, so launch another Activity that handles URLs
-		        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-		        startActivity(intent);
-		        return true;
-		    }
-		    // When finishing loading page, dismiss the ProgressDialog if it is showing
-		    public void onPageFinished(WebView view, String url) {
-			    if(myProgress.isShowing()) {
-			        myProgress.dismiss();
-			    }
-		    }
-	    });
-	    
-	    myWebView.loadUrl(urlAOKP);
-
-    }
-
     // Menu Selections
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-        
+
             case R.id.action_about:
                 showDialog(11);
                 break;
-                
+
             case R.id.action_donate:
                 Toast.makeText(getApplicationContext(),
                 "Your support is very much appreciated.",
@@ -133,68 +189,46 @@ public class MainActivity extends Activity {
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlDonateVersion));
                 startActivity(intent);
                 break;
-                
+
+            case R.id.action_reload:
+                Toast.makeText(getApplicationContext(),
+                "Fresh coat of Swagga, baby!",
+                Toast.LENGTH_LONG).show();
+                webView.reload();
+                break;
+
+            case R.id.action_exit:
+                Toast.makeText(getApplicationContext(),
+                "Thanks for using AOKP.co!",
+                Toast.LENGTH_SHORT).show();
+                MainActivity.this.finish();
+                break;
+
             default:
                 break;
+
         }
         return true;
     }
 
     public void onBackPressed (){
-        if (myWebView.isFocused() && myWebView.canGoBack()) {
-                myWebView.goBack();       
+        if (webView.isFocused() && webView.canGoBack()) {
+                webView.goBack();       
         }else {
-                //openMyDialog(null);
                 MainActivity.this.finish();
-
         }
     }
-
-    public void openMyDialog(WebView view) {
-        showDialog(10);
-    }
-
 
     @Override
     protected Dialog onCreateDialog(int id) {
-        switch (id) {
-        case 10:
-            // Create our Quit Dialog
-            Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("\nAre you sure you want to exit?\n")
-                .setTitle("Quit AOKP.co?")
-                .setCancelable(true)
-                .setPositiveButton("Exit AOKP.co",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog,
-                                    int which) {
-                                // Ends the activity
-                                MainActivity.this.finish();
-                            }
-                        })
-                .setNegativeButton("Cancel",
-                        new DialogInterface.OnClickListener() {
-
-                            @Override
-                            public void onClick(DialogInterface dialog,
-                                    int which) {
-                                Toast.makeText(getApplicationContext(),
-                                        "Enjoy your stay!",
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        });
-
-            return builder.create();
-        }
         switch (id) {    
             case 11:
             // Create our About Dialog
             TextView aboutMsg  = new TextView(this);
             aboutMsg.setMovementMethod(LinkMovementMethod.getInstance());
             aboutMsg.setPadding(30, 30, 30, 30);
-            aboutMsg.setText(Html.fromHtml("<big>A simple app which gives you quick access to the official home of the Unicorns.<br><br>It was <b><font color='white'>developed by scar45</font></b>, the same member of Team Kang who built and maintains the AOKP.co website (which is mobile-friendly).<br><br><b><font color='white'>Please consider purchasing the</font> <a href=\""+urlDonateVersion+"\">Donate version</a></b><font color='white'>, as your contribution would help a lot!</font></big>"));
-            
+            aboutMsg.setText(Html.fromHtml("<big>A simple app which gives you quick access to the official home of the Unicorns.<br><br><font color='white'>Developed by scar45</font>, the Team Kang member who designed, coded, and maintains the AOKP.co website. Extensive work was put forth in an effort to make your AOKP.co experience very pleasurable and effortless.<br><br><b><font color='white'>Please consider purchasing the</font> <a href=\""+urlDonateVersion+"\">Donate version</a></b><font color='white'>, as your contribution would surely help <em>a lot!</em></font></big>"));
+
             Builder builder = new AlertDialog.Builder(this);
                 builder.setView(aboutMsg)
                 .setTitle(Html.fromHtml("About <b><font color='" + getResources().getColor(R.color.aokp_pink) + "'>AOKP.co</font></b>"))
@@ -227,41 +261,8 @@ public class MainActivity extends Activity {
 
             return builder.create();
         }
-        switch (id) {
-        case 12:
-            // Create our Donate Dialog
-            Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("\nAlthough this app is simple, it wasn't the same to code (for myself, being a novice).\n\nDonating from this app supports me, scar45, the developer of the AOKP.co website and this Android app.\n")
-                .setCancelable(true)
-                .setPositiveButton("Donate to scar45 (TY!)",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog,
-                                int which) {
-                                    Toast.makeText(getApplicationContext(),
-                                    "Your support is very much appreciated.",
-                                    Toast.LENGTH_SHORT).show();
-                                    // Loads the donation version Play Store link
-		                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlDonateVersion));
-		                            startActivity(intent);
-                            }
-                        })
-                .setNegativeButton("Cancel",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog,
-                                int which) {
-                                    Toast.makeText(getApplicationContext(),
-                                    "Enjoy the AOKP.co Website",
-                                    Toast.LENGTH_SHORT).show();
-                            }
-                        });
-            return builder.create();
-        }
-        
+
         return super.onCreateDialog(id);
     }
-    
 
-    
 }
