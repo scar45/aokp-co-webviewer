@@ -204,6 +204,10 @@ public class MainActivity extends Activity {
                 MainActivity.this.finish();
                 break;
 
+            case R.id.action_sitemenu:
+                webView.loadUrl("javascript:toggleNavMenu();");
+                break;
+                
             default:
                 break;
 
