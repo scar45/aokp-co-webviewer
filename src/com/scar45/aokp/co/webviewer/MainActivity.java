@@ -25,6 +25,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ProgressBar;
+import android.webkit.DownloadListener;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -79,6 +80,18 @@ public class MainActivity extends Activity {
             webView.getSettings().setDomStorageEnabled(true);
             webView.getSettings().setAppCacheEnabled(true);
             webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+            
+            // Enable downloads of files within webView
+            webView.setDownloadListener(new DownloadListener() {
+                public void onDownloadStart(String url, String userAgent,
+                        String contentDisposition, String mimetype,
+                        long contentLength) {
+                  Intent i = new Intent(Intent.ACTION_VIEW);
+                  i.setData(Uri.parse(url));
+                  startActivity(i);
+                }
+            });
+
 
 			// Attach the ProgressBar layout
             loadingProgressBar=(ProgressBar)findViewById(R.id.progressbar_Horizontal);
@@ -104,9 +117,10 @@ public class MainActivity extends Activity {
             });   
 
             webView.setWebViewClient(new WebViewClient() {
-
+            
 		        @Override
 		        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+
 
 	                // If the site/domain matches, do not override; let myWebView load the page
 		            if (Uri.parse(url).getHost().equals(linkDomain)) {
@@ -119,6 +133,7 @@ public class MainActivity extends Activity {
 		            return true;
 		        }
 
+            
 	        });
 	        
 			// Load the first page
@@ -204,10 +219,23 @@ public class MainActivity extends Activity {
                 MainActivity.this.finish();
                 break;
 
+            case R.id.action_downloads:
+                webView.loadUrl(urlAOKP + "devices");
+                break;
+
+            case R.id.action_blog:
+                webView.loadUrl(urlAOKP + "blog");
+                break;
+                
+
+            case R.id.action_learn:
+                webView.loadUrl(urlAOKP + "learn");
+                break;
+                
             case R.id.action_sitemenu:
                 webView.loadUrl("javascript:toggleNavMenu();");
                 break;
-                
+                                
             default:
                 break;
 
