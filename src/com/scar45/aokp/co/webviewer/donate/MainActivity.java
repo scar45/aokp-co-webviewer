@@ -1,4 +1,4 @@
-package com.scar45.aokp.co.webviewer;
+package com.scar45.aokp.co.webviewer.donate;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -40,9 +40,8 @@ public class MainActivity extends Activity {
 
     ProgressBar loadingProgressBar,loadingTitle;
 
-    String urlAOKP = "http://clients.it-foundry.com/aokp/";
-    String linkDomain = "clients.it-foundry.com";
-    String urlDonateVersion = "https://play.google.com/store/apps/details?id=com.teambroccoli.theme.pcbblue";
+    String urlAOKP = "http://aokp.co/";
+    String linkDomain = "aokp.co";
     String urlscar45Play = "https://play.google.com/store/apps/developer?id=scar45";
 
     @Override
@@ -197,14 +196,6 @@ public class MainActivity extends Activity {
                 showDialog(11);
                 break;
 
-            case R.id.action_donate:
-                Toast.makeText(getApplicationContext(),
-                "Your support is very much appreciated.",
-                Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlDonateVersion));
-                startActivity(intent);
-                break;
-
             case R.id.action_reload:
                 Toast.makeText(getApplicationContext(),
                 "Fresh coat of Swagga, baby!",
@@ -259,11 +250,11 @@ public class MainActivity extends Activity {
             TextView aboutMsg  = new TextView(this);
             aboutMsg.setMovementMethod(LinkMovementMethod.getInstance());
             aboutMsg.setPadding(30, 30, 30, 30);
-            aboutMsg.setText(Html.fromHtml("<big>A simple app which gives you quick access to the official home of the Unicorns.<br><br><font color='white'>Developed by scar45</font>, the Team Kang member who designed, coded, and maintains the AOKP.co website. Extensive work was put forth in an effort to make your AOKP.co experience very pleasurable and effortless.<br><br><b><font color='white'>Please consider purchasing the</font> <a href=\""+urlDonateVersion+"\">Donate version</a></b><font color='white'>, as your contribution would surely help <em>a lot!</em></font></big>"));
+            aboutMsg.setText(Html.fromHtml("<big><font color='white'><b><big>THANK YOU FOR DONATING!</big></b><br><br><small><i>(Go ahead, pat yourself on the back, you deserve it!)</i></small></font><br><br>AOKP.co is a simple app which gives you quick access to the official home of the Unicorns.<br><br><font color='white'>Developed by scar45</font>, the Team Kang member who designed, coded, and maintains the AOKP.co website. Extensive work was put forth in an effort to make your AOKP.co experience very pleasurable and effortless.</big>"));
 
             Builder builder = new AlertDialog.Builder(this);
                 builder.setView(aboutMsg)
-                .setTitle(Html.fromHtml("About <b><font color='" + getResources().getColor(R.color.aokp_pink) + "'>AOKP.co</font></b>"))
+                .setTitle(Html.fromHtml("About <b><font color='" + getResources().getColor(R.color.aokp_pink) + "'>AOKP.co</font><br>(Donator Version)</b>"))
                 .setIcon(R.drawable.ic_launcher)
                 .setCancelable(true)
                 .setPositiveButton("Apps/Themes by scar45\non Google Play",
