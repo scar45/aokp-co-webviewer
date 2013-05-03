@@ -40,9 +40,9 @@ public class MainActivity extends Activity {
 
     ProgressBar loadingProgressBar,loadingTitle;
 
-    String urlAOKP = "http://clients.it-foundry.com/aokp/";
-    String linkDomain = "clients.it-foundry.com";
-    String urlDonateVersion = "https://play.google.com/store/apps/details?id=com.teambroccoli.theme.pcbblue";
+    String urlAOKP = "http://aokp.co/";
+    String linkDomain = "aokp.co";
+    String urlDonateVersion = "https://play.google.com/store/apps/details?id=com.scar45.aokp.co.webviewer.donate";
     String urlscar45Play = "https://play.google.com/store/apps/developer?id=scar45";
 
     @Override

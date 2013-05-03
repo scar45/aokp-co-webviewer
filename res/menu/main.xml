@@ -26,25 +26,25 @@
         
     <item
         android:id="@+id/action_blog"
-        android:orderInCategory="4"
+        android:orderInCategory="5"
         android:showAsAction="never"
         android:title="@string/action_blog"/>   
         
     <item
         android:id="@+id/action_learn"
-        android:orderInCategory="4"
+        android:orderInCategory="6"
         android:showAsAction="never"
         android:title="@string/action_learn"/>   
                         
     <item
         android:id="@+id/action_reload"
-        android:orderInCategory="5"
+        android:orderInCategory="7"
         android:showAsAction="never"
         android:title="@string/action_reload"/>
         
     <item
         android:id="@+id/action_exit"
-        android:orderInCategory="6"
+        android:orderInCategory="8"
         android:showAsAction="never"
         android:title="@string/action_exit"/>
         
