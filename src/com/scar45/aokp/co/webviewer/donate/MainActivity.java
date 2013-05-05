@@ -43,6 +43,8 @@ public class MainActivity extends Activity {
     String urlAOKP = "http://aokp.co/";
     String linkDomain = "aokp.co";
     String urlscar45Play = "https://play.google.com/store/apps/developer?id=scar45";
+    String urlscar45 = "http://twitter.com/scar45";
+    String urlGithub = "https://github.com/scar45/aokp-co-webviewer";    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -250,7 +252,7 @@ public class MainActivity extends Activity {
             TextView aboutMsg  = new TextView(this);
             aboutMsg.setMovementMethod(LinkMovementMethod.getInstance());
             aboutMsg.setPadding(30, 30, 30, 30);
-            aboutMsg.setText(Html.fromHtml("<big><font color='white'><b><big>THANK YOU FOR DONATING!</big></b><br><br><small><i>(Go ahead, pat yourself on the back, you deserve it!)</i></small></font><br><br>AOKP.co is a simple app which gives you quick access to the official home of the Unicorns.<br><br><font color='white'>Developed by scar45</font>, the Team Kang member who designed, coded, and maintains the AOKP.co website. Extensive work was put forth in an effort to make your AOKP.co experience very pleasurable and effortless.</big>"));
+            aboutMsg.setText(Html.fromHtml("<big><font color='white'><b><big>THANK YOU FOR DONATING!</big></b><br><br><small><i>(Go ahead, pat yourself on the back, you deserve it!)</i></small></font><br><br>AOKP.co is a simple app which gives you quick access to the official home of the Unicorns.<br><br><font color='white'>Developed by</font> <a href=\""+urlscar45+"\">scar45</a><font color='white'>, source on</font> <a href=\""+urlGithub+"\">Github</a><font color='white'>.</font></big>"));
 
             Builder builder = new AlertDialog.Builder(this);
                 builder.setView(aboutMsg)
