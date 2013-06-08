@@ -29,7 +29,7 @@
     <!-- DON'T TOUCH THIS ONE -->
     <loadproperties srcFile="default.properties" />
     <!-- ADD YOUR KEYSTORE PROPERTIES HERE -->
-    <loadproperties srcFile="../.my.properties" />
+    <loadproperties srcFile="../../.my.properties" />
 
     <!-- quick check on sdk.dir -->
     <fail
