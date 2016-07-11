@@ -1,11 +1,12 @@
 package com.scar45.aokp.co.webviewer;
 
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AlertDialog.Builder;
+
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.ActionBar;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -31,7 +32,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
 
     protected FrameLayout webViewPlaceholder;
 	protected WebView webView;
@@ -76,7 +77,7 @@ public class MainActivity extends Activity {
 			webView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
 			webView.setScrollbarFadingEnabled(true);
 			webView.getSettings().setLoadsImagesAutomatically(true);
-            webView.getSettings().setPluginsEnabled(true);
+            //webView.getSettings().setPluginsEnabled(true);
             webView.getSettings().setJavaScriptEnabled(true);
             webView.getSettings().setDatabaseEnabled(true);
             webView.getSettings().setDomStorageEnabled(true);
