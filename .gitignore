@@ -6,3 +6,6 @@ aapt
 android.jar
 *~
 /.project
+.idea/
+build/
+.gradle/
